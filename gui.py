@@ -6,6 +6,29 @@ from database_setup import Session, Donor, BloodInventory
 
 session = Session()
 
+# Define the blood compatibility dictionaries
+receive_blood_from = {
+    "A+": ["A-", "O+", "O-"],
+    "O+": ["O-"],
+    "B+": ["B-", "O+", "O-"],
+    "AB+": ["A+", "B+", "O+", "AB-", "A-", "B-", "O-"],
+    "A-": ["O-"],
+    "O-": [],
+    "B-": ["O-"],
+    "AB-": ["A-", "B-", "O-"]
+}
+
+donate_blood_to = {
+    "A+": ["A+", "AB+"],
+    "O+": ["O+", "A+", "B+", "AB+"],
+    "B+": ["B+", "AB+"],
+    "AB+": ["AB+"],
+    "A-": ["A+", "A-", "AB+", "AB-"],
+    "O-": ["Everyone"],
+    "B-": ["B+", "B-", "AB+", "AB-"],
+    "AB-": ["AB+", "AB-"]
+}
+
 
 # Function to submit donor information
 def submit_donor():
@@ -60,7 +83,6 @@ def check_availability(blood_type):
     return inventory_entry.units if inventory_entry else 0
 
 
-# Function to dispense blood routinely
 def routine_dispense():
     requested_blood_type = blood_type_combobox_routine.get()
     requested_units = int(units_entry.get())
@@ -73,11 +95,12 @@ def routine_dispense():
         session.commit()
         messagebox.showinfo("Success", f"Dispensed {requested_units} units of {requested_blood_type} blood.")
     else:
-        alternatives = ["O+", "A-", "B+", "AB+"]  # Example alternatives
-        alternative_message = f"Recommended alternative blood types are: {', '.join(alternatives)}"
+        # Get compatible alternatives from the dictionary, excluding the same blood type
+        alternatives = receive_blood_from.get(requested_blood_type, [])
+        alternative_message = f"Recommended alternative blood types are: {', '.join(alternatives)}" if alternatives else "No alternatives available."
+
         messagebox.showwarning("Out of Stock",
                                f"Only {available_units} units of {requested_blood_type} available.\n{alternative_message}")
-
 
 # Function to dispense blood in emergency
 def emergency_dispense():
@@ -92,6 +115,7 @@ def emergency_dispense():
     except Exception as e:
         session.rollback()
         messagebox.showerror("Database Error", f"An error occurred: {e}")
+        # ToDo - Dispense all O- not just one unit
 
 
 # Tkinter setup
