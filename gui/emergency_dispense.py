@@ -1,14 +1,18 @@
 # gui/emergency_dispense.py
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 from database import Session, BloodInventory, AuditLog
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class EmergencyDispense:
-    def __init__(self, parent):
+    def __init__(self, parent, role):
         self.frame = ttk.Frame(parent)
         self.session = Session()
+        self.role = role
         self.create_widgets()
 
     def create_widgets(self):
@@ -18,6 +22,10 @@ class EmergencyDispense:
                                                                                                           pady=10)
 
     def emergency_dispense(self):
+        if self.role != "Admin":
+            messagebox.showerror("Permission Denied", "Only Admins can dispense emergency blood.")
+            return
+
         try:
             inventory_entry = self.session.query(BloodInventory).filter_by(blood_type="O-").first()
             if inventory_entry and inventory_entry.units > 0:

@@ -1,9 +1,12 @@
 # gui/view_logs.py
+import os
+import sys
 import tkinter as tk
 from tkinter import messagebox, ttk
 
 from database import Session, AuditLog
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class ViewLogs:
     def __init__(self, parent):

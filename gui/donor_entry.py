@@ -2,20 +2,19 @@
 import json
 import os
 import sys
-
-# Ensure the parent directory is in the sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from database import Session, Donor, BloodInventory, AuditLog
-from datetime import datetime
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk, messagebox
 
+from database import Session, Donor, BloodInventory, AuditLog
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class DonorEntry:
-    def __init__(self, parent):
+    def __init__(self, parent, role):
         self.frame = ttk.Frame(parent)
         self.session = Session()
+        self.role = role
         self.create_widgets()
 
     def create_widgets(self):
@@ -36,7 +35,16 @@ class DonorEntry:
         self.donation_date_entry.grid(row=3, column=1, padx=10, pady=5)
 
         tk.Button(self.frame, text="Submit", command=self.submit_donor).grid(row=4, column=0, columnspan=2, pady=10)
-        tk.Button(self.frame, text="Export Data", command=self.export_data).grid(row=5, column=0, columnspan=2, pady=10)
+        tk.Button(self.frame, text="Reset", command=self.reset_form).grid(row=5, column=0, columnspan=2, pady=10)
+        if self.role == "Admin":
+            tk.Button(self.frame, text="Export Data", command=self.export_data).grid(row=6, column=0, columnspan=2,
+                                                                                     pady=10)
+
+    def reset_form(self):
+        self.name_entry.delete(0, tk.END)
+        self.id_entry.delete(0, tk.END)
+        self.blood_type_combobox.set('')
+        self.donation_date_entry.delete(0, tk.END)
 
     def submit_donor(self):
         name = self.name_entry.get()
@@ -68,11 +76,16 @@ class DonorEntry:
             self.session.commit()
             messagebox.showinfo("Success", "Donor added successfully!")
             self.log_activity("Submit Donor", f"Name: {name}, ID: {id_number}, Blood Type: {blood_type}")
+            self.reset_form()
         except Exception as e:
             self.session.rollback()
             messagebox.showerror("Database Error", f"An error occurred: {e}")
 
     def export_data(self):
+        if self.role != "Admin":
+            messagebox.showerror("Permission Denied", "Only Admins can export data.")
+            return
+
         data = {
             "donors": [self.serialize(donor) for donor in self.session.query(Donor).all()],
             "inventory": [self.serialize(inventory) for inventory in self.session.query(BloodInventory).all()],

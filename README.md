@@ -1,70 +1,87 @@
-# Blood Establishment Computer Software (BECS) Project
+# Blood Donation and Dispensing System (BECS)
 
-## Project Overview
+## Table of Contents
 
-This project is a Blood Establishment Computer Software (BECS) system designed to manage blood donation entries, routine blood dispensing, and emergency blood dispensing. The project is implemented using Python, Tkinter for the graphical user interface (GUI), and SQLAlchemy for database management.
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [User Credentials](#user-credentials)
+
+## Overview
+
+The Blood Donation and Dispensing System (BECS) is a HIPAA-compliant application designed to manage blood donations and
+dispensing activities. The system supports multiple user roles and ensures the protection of sensitive information.
 
 ## Features
 
-- **Donor Management**: Enter and store donor information.
-- **Routine Blood Dispensing**: Dispense blood units based on requests.
-- **Emergency Blood Dispensing**: Handle emergency blood requests efficiently.
-- **Audit Trail**: Maintain a security-relevant chronological record of all significant actions.
-- **Data Export**: Export all donor, inventory, and log data to a JSON file.
+- **Admin**: Can define users, perform all actions, and view metadata.
+- **User (Blood Bank Worker)**: Can deposit and withdraw blood units.
+- **Research Student**: Cannot view personal data of blood donors.
+- Role-based access control.
+- Secure login with hashed passwords.
+- Complies with HIPAA and PART 11 requirements.
 
-## Requirements
+## Project Structure
 
-- Python 3.x
-- Tkinter
-- SQLAlchemy
+Project/
+├── database.py
+├── create_easy_users.py
+├── gui/
+│ ├── init.py
+│ ├── main.py
+│ ├── auth.py
+│ ├── donor_entry.py
+│ ├── routine_dispense.py
+│ ├── emergency_dispense.py
+│ ├── view_logs.py
+└── README.md
 
 ## Setup Instructions
 
-### Step 1: Install Required Packages
+### Prerequisites
 
-Open a terminal and run the following commands to install the necessary packages:
+- Python 3.8 or higher
+- SQLite
 
-```bash
-pip install tk
-pip install sqlalchemy
-```
+### Installation
 
-### Step 2: Run The Application
+1. **Clone the Repository:**
 
-```bash
-python gui.py
-```
+   ```bash
+   git clone <repository_url>
+   cd Project
+   ```
+2. **Install Dependencies:**
+   ```bash
+   pip install sqlalchemy bcrypt tkinter
+   ```
+3. **Set Up the Database:**
+   ```bash
+   python database.py
+   ```
+4. **Create Initial Users:**
+   ```bash
+   python create_easy_users.py
+   ```
 
-### Usage
+## Running the Application
 
-#### Donor Management
+   ```bash
+   python gui/main.py
+   ```
 
-1. Enter Donor Information: Input the donor’s full name, ID number, blood type, and donation date. Click “Submit” to
-   save the information.
-2. View Donor Entries: This feature has been removed as donor entries can now be viewed in the Audit Logs tab.
+## User Credentials
 
-### Routine Blood Dispensing
-
-	1.	Select Blood Type: Choose the requested blood type from the dropdown.
-	2.	Enter Number of Units: Input the number of units to dispense.
-	3.	Dispense Blood: Click “Dispense Blood” to process the request. The system will log the action and update the inventory.
-
-### Emergency Blood Dispensing
-
-	1.	Dispense Emergency Blood: Click “Dispense Emergency Blood (O-)” to process an emergency request for O- blood. The system will log the action and update the inventory.
-
-### Audit Logs
-
-	1.	View Logs: Navigate to the “Audit Logs” tab to view all logged actions.
-	2.	Refresh Logs: Click “Refresh Logs” to update the log display with the latest entries.
-
-### Data Export
-
-	1.	Export Data: Click “Export Data” in the Donor Entry tab to export all donor, inventory, and log data to a JSON file.
-
-### Project Structure
-
-	•	database.py: Defines the database schema and sets up the SQLite database.
-	•	gui.py: Implements the GUI and application logic.
-
-
+- **Admin**
+   - Username: `admin`
+   - Password: `admin`
+- **User (Blood Bank Worker)**
+   - Username: `user`
+   - Password: `user`
+- **Research Student**
+   - Username: `student`
+   - Password: `student`

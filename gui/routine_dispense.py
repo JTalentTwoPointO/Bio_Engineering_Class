@@ -1,8 +1,12 @@
 # gui/routine_dispense.py
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 from database import Session, BloodInventory, AuditLog
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 receive_blood_from = {
     "A+": ["A-", "O+", "O-"],
@@ -15,11 +19,11 @@ receive_blood_from = {
     "AB-": ["A-", "B-", "O-"]
 }
 
-
 class RoutineDispense:
-    def __init__(self, parent):
+    def __init__(self, parent, role):
         self.frame = ttk.Frame(parent)
         self.session = Session()
+        self.role = role
         self.create_widgets()
 
     def create_widgets(self):
@@ -35,6 +39,10 @@ class RoutineDispense:
                                                                                          pady=10)
 
     def routine_dispense(self):
+        if self.role not in ["Admin", "User"]:
+            messagebox.showerror("Permission Denied", "Only Admins and Users can dispense blood.")
+            return
+
         requested_blood_type = self.blood_type_combobox.get()
         requested_units = int(self.units_entry.get())
 
