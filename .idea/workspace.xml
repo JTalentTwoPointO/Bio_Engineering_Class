@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b57b0295-0b03-4558-8bd4-5c42854c5fd2" name="Changes" comment="Refactoring of Structure">
-      <change afterPath="$PROJECT_DIR$/create_users.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/auth.py" afterDir="false" />
+    <list default="true" id="b57b0295-0b03-4558-8bd4-5c42854c5fd2" name="Changes" comment="Lab 3 Completed - Hippa for BECS.&#10;&#10; &quot;Enhance BECS for HIPAA compliance, add role-based access control, update README.md, and ensure no regression in PART 11 functionality&quot;">
+      <change afterPath="$PROJECT_DIR$/train_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/donor_entry.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/donor_entry.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/emergency_dispense.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/emergency_dispense.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/routine_dispense.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/routine_dispense.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/view_logs.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/view_logs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +217,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722180875733</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Lab 3 Completed - Hippa for BECS.&#10;&#10; &quot;Enhance BECS for HIPAA compliance, add role-based access control, update README.md, and ensure no regression in PART 11 functionality&quot;">
+      <option name="closed" value="true" />
+      <created>1722182877725</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722182877725</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,10 +246,21 @@
     <MESSAGE value="test" />
     <MESSAGE value="Defined blood compatibility dictionaries logic." />
     <MESSAGE value="Refactoring of Structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring of Structure" />
+    <MESSAGE value="Lab 3 Completed - Hippa for BECS.&#10;&#10; &quot;Enhance BECS for HIPAA compliance, add role-based access control, update README.md, and ensure no regression in PART 11 functionality&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lab 3 Completed - Hippa for BECS.&#10;&#10; &quot;Enhance BECS for HIPAA compliance, add role-based access control, update README.md, and ensure no regression in PART 11 functionality&quot;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/database.py</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Bio_Engineering_Class$main.coverage" NAME="main Coverage Results" MODIFIED="1722181914587" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
