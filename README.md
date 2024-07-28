@@ -24,12 +24,14 @@ dispensing activities. The system supports multiple user roles and ensures the p
 - Role-based access control.
 - Secure login with hashed passwords.
 - Complies with HIPAA and PART 11 requirements.
+- Predictive analytics for future blood demand.
 
 ## Project Structure
 
 Project/
 ├── database.py
 ├── create_easy_users.py
+├── train_model.py
 ├── gui/
 │ ├── init.py
 │ ├── main.py
@@ -57,19 +59,27 @@ Project/
    ```
 2. **Install Dependencies:**
    ```bash
-   pip install sqlalchemy bcrypt tkinter
-   ```
+    pip install sqlalchemy bcrypt tkinter scikit-learn pandas
 3. **Set Up the Database:**
    ```bash
    python database.py
    ```
 4. **Create Initial Users:**
    ```bash
-   python create_easy_users.py
+   python create_users.py
+   ```
+5. **Populate Historical Data (if needed):**
+    ```bash
+   python populate_historical_data.py 
+   ```
+6. **Train the Model:**
+    ```bash
+   python train_model.py
    ```
 
 ## Running the Application
 
+~~~~
    ```bash
    python gui/main.py
    ```
