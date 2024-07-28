@@ -1,8 +1,9 @@
+import json
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox
 
-from database_setup import Session, Donor, BloodInventory
+from database import Session, Donor, BloodInventory, AuditLog
 
 session = Session()
 
@@ -28,6 +29,13 @@ donate_blood_to = {
     "B-": ["B+", "B-", "AB+", "AB-"],
     "AB-": ["AB+", "AB-"]
 }
+
+
+# Helper function to log activities
+def log_activity(action, details):
+    new_log = AuditLog(action=action, details=details)
+    session.add(new_log)
+    session.commit()
 
 
 # Function to submit donor information
@@ -60,6 +68,7 @@ def submit_donor():
 
         session.commit()
         messagebox.showinfo("Success", "Donor added successfully!")
+        log_activity("Submit Donor", f"Name: {name}, ID: {id_number}, Blood Type: {blood_type}")
     except Exception as e:
         session.rollback()
         messagebox.showerror("Database Error", f"An error occurred: {e}")
@@ -83,6 +92,7 @@ def check_availability(blood_type):
     return inventory_entry.units if inventory_entry else 0
 
 
+# Function to dispense blood routinely
 def routine_dispense():
     requested_blood_type = blood_type_combobox_routine.get()
     requested_units = int(units_entry.get())
@@ -94,13 +104,15 @@ def routine_dispense():
         inventory_entry.units -= requested_units
         session.commit()
         messagebox.showinfo("Success", f"Dispensed {requested_units} units of {requested_blood_type} blood.")
+        log_activity("Routine Dispense", f"Blood Type: {requested_blood_type}, Units: {requested_units}")
     else:
-        # Get compatible alternatives from the dictionary, excluding the same blood type
         alternatives = receive_blood_from.get(requested_blood_type, [])
         alternative_message = f"Recommended alternative blood types are: {', '.join(alternatives)}" if alternatives else "No alternatives available."
-
         messagebox.showwarning("Out of Stock",
                                f"Only {available_units} units of {requested_blood_type} available.\n{alternative_message}")
+        log_activity("Routine Dispense Failed",
+                     f"Blood Type: {requested_blood_type}, Requested Units: {requested_units}, Available Units: {available_units}")
+
 
 # Function to dispense blood in emergency
 def emergency_dispense():
@@ -110,12 +122,45 @@ def emergency_dispense():
             inventory_entry.units = 0
             session.commit()
             messagebox.showinfo("Success", "Emergency blood dispensed successfully!")
+            log_activity("Emergency Dispense", "Dispensed O- blood")
         else:
             messagebox.showerror("Out of Stock", "O- blood is out of stock.")
+            log_activity("Emergency Dispense Failed", "O- blood out of stock")
     except Exception as e:
         session.rollback()
         messagebox.showerror("Database Error", f"An error occurred: {e}")
-        # ToDo - Dispense all O- not just one unit
+
+
+# Function to export data to JSON
+def export_data():
+    data = {
+        "donors": [serialize(donor) for donor in session.query(Donor).all()],
+        "inventory": [serialize(inventory) for inventory in session.query(BloodInventory).all()],
+        "logs": [serialize(log) for log in session.query(AuditLog).all()]
+    }
+
+    with open("export_data.json", "w") as f:
+        json.dump(data, f, default=str)
+
+    messagebox.showinfo("Export", "Data exported successfully!")
+    log_activity("Export Data", "Exported data to JSON")
+
+
+# Helper function to serialize SQLAlchemy objects
+def serialize(instance):
+    return {key: value for key, value in instance.__dict__.items() if key != '_sa_instance_state'}
+
+
+# Function to view audit logs
+def view_logs():
+    logs_text.delete(1.0, tk.END)
+    try:
+        logs = session.query(AuditLog).all()
+        for log in logs:
+            logs_text.insert(tk.END,
+                             f"ID: {log.id}, Timestamp: {log.timestamp}, Action: {log.action}, Details: {log.details}\n")
+    except Exception as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
 
 
 # Tkinter setup
@@ -146,10 +191,8 @@ donation_date_entry.grid(row=3, column=1, padx=10, pady=5)
 
 tk.Button(donor_entry_tab, text="Submit", command=submit_donor).grid(row=4, column=0, columnspan=2, pady=10)
 
-entries_text = tk.Text(donor_entry_tab, height=10, width=50)
-entries_text.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
-
-tk.Button(donor_entry_tab, text="View Entries", command=view_entries).grid(row=6, column=0, columnspan=2, pady=10)
+# Add export button in the GUI
+tk.Button(donor_entry_tab, text="Export Data", command=export_data).grid(row=7, column=0, columnspan=2, pady=10)
 
 # Routine Dispensing Tab
 routine_dispensing_tab = ttk.Frame(tab_control)
@@ -175,6 +218,15 @@ tk.Button(emergency_dispensing_tab, text="Dispense Emergency Blood (O-)", comman
                                                                                                            column=0,
                                                                                                            columnspan=2,
                                                                                                            pady=10)
+
+# Log Viewing Tab
+log_viewing_tab = ttk.Frame(tab_control)
+tab_control.add(log_viewing_tab, text='Audit Logs')
+
+logs_text = tk.Text(log_viewing_tab, height=20, width=100)
+logs_text.grid(row=0, column=0, padx=10, pady=10)
+
+tk.Button(log_viewing_tab, text="Refresh Logs", command=view_logs).grid(row=1, column=0, pady=10)
 
 tab_control.pack(expand=1, fill='both')
 
