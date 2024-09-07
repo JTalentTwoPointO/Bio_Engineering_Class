@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
-from database import Session, User
+from database.database import Session, User
 
 
 class Auth:

@@ -41,14 +41,6 @@ class User(Base):
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash)
 
-
-class HistoricalData(Base):
-    __tablename__ = 'historical_data'
-    id = Column(Integer, primary_key=True)
-    date = Column(Date, nullable=False)
-    blood_type = Column(String, nullable=False)
-    units_used = Column(Integer, nullable=False)
-
 engine = create_engine('sqlite:///becs.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)

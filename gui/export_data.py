@@ -2,7 +2,7 @@ import json
 import tkinter as tk
 from tkinter import messagebox
 
-from database import Session, Donor, BloodInventory, AuditLog
+from database.database import Session, Donor, BloodInventory, AuditLog
 
 
 class ExportData:

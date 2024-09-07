@@ -4,7 +4,7 @@ import sys
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from database import Session, AuditLog
+from database.database import Session, AuditLog
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

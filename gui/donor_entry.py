@@ -6,7 +6,7 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox
 
-from database import Session, Donor, BloodInventory, AuditLog
+from database.database import Session, Donor, BloodInventory, AuditLog
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

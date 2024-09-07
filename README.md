@@ -68,9 +68,9 @@ Project/
    ```bash
    python create_users.py
    ```
-5. **Populate Historical Data (if needed):**
+5. **Populate Blood Data:**
     ```bash
-   python populate_historical_data.py 
+   python populate_blood_data.py 
    ```
 6. **Train the Model:**
     ```bash
@@ -81,7 +81,7 @@ Project/
 
 ~~~~
    ```bash
-   python gui/main.py
+   python main.py
    ```
 
 ## User Credentials

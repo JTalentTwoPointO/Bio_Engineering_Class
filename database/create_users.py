@@ -1,7 +1,7 @@
 # create_easy_users.py
 import bcrypt
 
-from database import Session, User
+from .database import Session, User
 
 session = Session()
 
